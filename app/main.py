@@ -15,6 +15,7 @@ from openpyxl import load_workbook
 from .database import Base, engine, get_db
 from .models import ExcelRow
 
+from pydantic import BaseModel
 
 app = FastAPI(
     title="Incremental Excel Upload API"
@@ -23,6 +24,39 @@ app = FastAPI(
 
 Base.metadata.create_all(bind=engine)
 
+
+class items(BaseModel):
+    name : str
+    price : float
+    avaliablity : bool
+
+
+
+
+
+emp = [
+    {'id':1,'name':'karan','service':'fast api','status':'active',
+    'id':2,'name':'kumar','service':'fast api','status':'inactive',
+    'id':3,'name':'gautam','service':'react','status':'active'}
+]
+
+
+
+@app.get("/display/{id}")
+def view(id:int):
+    for e in emp:
+        if e['id'] == id:
+            return e
+        else:
+            return "ID not found"
+
+@app.get("/display")
+def query_par(id : str):
+    for e in emp:
+        if e['name']==id:
+            return e
+        else:
+            return "Id not found"
 
 @app.get("/")
 def root():
