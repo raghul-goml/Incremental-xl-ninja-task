@@ -15,7 +15,10 @@ from openpyxl import load_workbook
 from .database import Base, engine, get_db
 from .models import ExcelRow
 
-from pydantic import BaseModel
+from pydantic import BaseModel,Field
+
+from typing import Optional
+
 
 app = FastAPI(
     title="Incremental Excel Upload API"
@@ -24,39 +27,6 @@ app = FastAPI(
 
 Base.metadata.create_all(bind=engine)
 
-
-class items(BaseModel):
-    name : str
-    price : float
-    avaliablity : bool
-
-
-
-
-
-emp = [
-    {'id':1,'name':'karan','service':'fast api','status':'active',
-    'id':2,'name':'kumar','service':'fast api','status':'inactive',
-    'id':3,'name':'gautam','service':'react','status':'active'}
-]
-
-
-
-@app.get("/display/{id}")
-def view(id:int):
-    for e in emp:
-        if e['id'] == id:
-            return e
-        else:
-            return "ID not found"
-
-@app.get("/display")
-def query_par(id : str):
-    for e in emp:
-        if e['name']==id:
-            return e
-        else:
-            return "Id not found"
 
 @app.get("/")
 def root():
@@ -70,8 +40,7 @@ async def upload_excel(
     file: UploadFile = File(...),
     db: Session = Depends(get_db)
 ):
-
-    if not file.filename.endswith(".xlsx"):
+    if not file.filename.lower().endswith(".xlsx"):
         raise HTTPException(
             status_code=400,
             detail="Only XLSX files are supported"
@@ -92,6 +61,7 @@ async def upload_excel(
     ]
 
     processed_rows = []
+    updated_rows = []
     skipped_rows = []
 
     for row in sheet.iter_rows(
@@ -99,9 +69,10 @@ async def upload_excel(
         values_only=True
     ):
 
-        row_data = dict(
-            zip(headers, row)
-        )
+        row_data = dict(zip(headers, row))
+
+        if row_data.get("ID") is None:
+            continue
 
         row_id = str(row_data["ID"])
 
@@ -113,27 +84,63 @@ async def upload_excel(
             .first()
         )
 
-        if existing_row:
-            skipped_rows.append(row_id)
-            continue
+        if not existing_row:
 
-        new_row = ExcelRow(
-            row_id=row_id,
-            name=row_data.get("Name"),
-            service=row_data.get("Service"),
-            status=row_data.get("Status")
-        )
+            new_row = ExcelRow(
+                row_id=row_id,
+                name=row_data.get("Name"),
+                service=row_data.get("Service"),
+                status=row_data.get("Status")
+            )
 
-        db.add(new_row)
+            db.add(new_row)
 
-        processed_rows.append(row_data)
+            processed_rows.append(row_data)
+
+        else:
+
+            changes = {}
+
+            if existing_row.name != row_data.get("Name"):
+                changes["Name"] = {
+                    "old": existing_row.name,
+                    "new": row_data.get("Name")
+                }
+                existing_row.name = row_data.get("Name")
+
+            if existing_row.service != row_data.get("Service"):
+                changes["Service"] = {
+                    "old": existing_row.service,
+                    "new": row_data.get("Service")
+                }
+                existing_row.service = row_data.get("Service")
+
+            if existing_row.status != row_data.get("Status"):
+                changes["Status"] = {
+                    "old": existing_row.status,
+                    "new": row_data.get("Status")
+                }
+                existing_row.status = row_data.get("Status")
+
+            if changes:
+
+                updated_rows.append({
+                    "row_id": row_id,
+                    "changes": changes
+                })
+
+            else:
+
+                skipped_rows.append(row_id)
 
     db.commit()
 
     return {
         "filename": file.filename,
         "processed_count": len(processed_rows),
+        "updated_count": len(updated_rows),
         "skipped_count": len(skipped_rows),
         "processed_rows": processed_rows,
+        "updated_rows": updated_rows,
         "skipped_rows": skipped_rows
     }
