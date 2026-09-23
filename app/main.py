@@ -1,4 +1,9 @@
+import sys
+import asyncio
 import io
+
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 from fastapi import (
     FastAPI,
@@ -14,8 +19,9 @@ from openpyxl import load_workbook
 
 from .database import Base, engine, get_db
 from .models import ExcelRow
+from .crawlAI import crawl_url
 
-from pydantic import BaseModel,Field
+from pydantic import BaseModel, Field
 
 from typing import Optional
 
@@ -33,6 +39,25 @@ def root():
     return {
         "message": "Incremental Excel API is running"
     }
+
+
+@app.get("/users")
+def get_user(name):
+    return {
+        "message": f"Hello, {name}!"
+    }
+
+
+@app.get("/crawl")
+@app.post("/crawl")
+async def run_crawl():
+    result = await crawl_url()
+    if not result["success"]:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Crawl failed: {result['error']}"
+        )
+    return result
 
 
 @app.post("/upload")
