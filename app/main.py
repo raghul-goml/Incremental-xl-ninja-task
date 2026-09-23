@@ -10,24 +10,23 @@ from fastapi import (
     UploadFile,
     File,
     Depends,
-    HTTPException
+    HTTPException,
+    Query
 )
 
 from sqlalchemy.orm import Session
-
 from openpyxl import load_workbook
 
 from .database import Base, engine, get_db
 from .models import ExcelRow
-from .crawlAI import crawl_url
+from .crawlAI import crawl_url, load_repository_config
 
 from pydantic import BaseModel, Field
-
-from typing import Optional
+from typing import Optional, List, Dict, Any
 
 
 app = FastAPI(
-    title="Incremental Excel Upload API"
+    title="Incremental Excel & Healthcare Crawler API"
 )
 
 
@@ -37,25 +36,54 @@ Base.metadata.create_all(bind=engine)
 @app.get("/")
 def root():
     return {
-        "message": "Incremental Excel API is running"
+        "message": "Incremental Excel & Healthcare Crawler API is running"
     }
 
 
-@app.get("/users")
-def get_user(name):
-    return {
-        "message": f"Hello, {name}!"
-    }
+@app.get("/sources")
+def get_sources():
+    """List all registered regulatory source repositories."""
+    configs = load_repository_config()
+    return configs
 
 
 @app.get("/crawl")
 @app.post("/crawl")
-async def run_crawl():
-    result = await crawl_url()
-    if not result["success"]:
+async def run_crawl(
+    source_id: Optional[str] = Query(None, description="Optional source_id to crawl (e.g., 'us-nc-dhsr-rules' or 'us-sc-code-title44-ch115')")
+):
+    """Crawl a source by query parameter or default to the first configured source."""
+    result = await crawl_url(source_id=source_id)
+    if not result.get("success"):
         raise HTTPException(
             status_code=500,
-            detail=f"Crawl failed: {result['error']}"
+            detail=f"Crawl failed: {result.get('error')}"
+        )
+    return result
+
+
+@app.get("/crawl/nc")
+@app.post("/crawl/nc")
+async def run_crawl_nc():
+    """Dedicated route to crawl North Carolina DHSR Rules."""
+    result = await crawl_url(source_id="us-nc-dhsr-rules")
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=500,
+            detail=f"Crawl failed: {result.get('error')}"
+        )
+    return result
+
+
+@app.get("/crawl/sc")
+@app.post("/crawl/sc")
+async def run_crawl_sc():
+    """Dedicated route to crawl South Carolina Code Title 44 Health."""
+    result = await crawl_url(source_id="us-sc-code-title44-ch115")
+    if not result.get("success"):
+        raise HTTPException(
+            status_code=500,
+            detail=f"Crawl failed: {result.get('error')}"
         )
     return result
 

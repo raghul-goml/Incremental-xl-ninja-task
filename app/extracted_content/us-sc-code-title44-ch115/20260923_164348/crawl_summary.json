@@ -1,0 +1,61 @@
+{
+  "source_id": "us-sc-code-title44-ch115",
+  "seed_url": "https://www.scstatehouse.gov/code/t44c115.php",
+  "total_documents_scraped": 1,
+  "total_html_pages": 1,
+  "total_pdfs_parsed": 0,
+  "combined_content_hash": "97fafd0c82ca344e4f731ec82f03a78c74103e3569788a27cbe031fdd15bc472",
+  "metadata": {
+    "source_id": "us-sc-code-title44-ch115",
+    "jurisdiction": {
+      "country": "US",
+      "state": "South Carolina",
+      "code": "US-SC",
+      "level": "state"
+    },
+    "source": {
+      "name": "South Carolina Code of Laws - Title 44 Health",
+      "type": "state_healthcare_code",
+      "authority": "South Carolina Legislature / Legislative Council",
+      "official": true,
+      "relevance": "Official South Carolina statutory healthcare source containing state health laws relevant to healthcare regulatory monitoring.",
+      "base_url": "https://www.scstatehouse.gov/code/",
+      "seed_urls": [
+        "https://www.scstatehouse.gov/code/t44c115.php"
+      ],
+      "allowed_domains": [
+        "www.scstatehouse.gov"
+      ]
+    },
+    "crawl_settings": {
+      "enabled": true,
+      "engine": "crawl4ai",
+      "max_depth": 1,
+      "follow_links": true,
+      "include_pdf": true,
+      "allowed_content_types": [
+        "text/html",
+        "application/pdf"
+      ],
+      "respect_robots_txt": true,
+      "request_timeout_seconds": 30,
+      "max_retries": 3
+    },
+    "monitoring": {
+      "frequency": "monthly",
+      "change_detection": true,
+      "hash_algorithm": "sha256"
+    },
+    "status": {
+      "active": true,
+      "accessibility": "accessible",
+      "validation": "verified"
+    },
+    "timestamps": {
+      "created_at": null,
+      "updated_at": null,
+      "last_crawled_at": "2026-09-23T11:13:38.169281+00:00",
+      "last_success_at": "2026-09-23T11:13:38.169281+00:00"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "source_id": "us-nc-dhsr-rules",
+  "seed_url": "https://info.ncdhhs.gov/dhsr/rules.htm",
+  "total_documents_scraped": 2,
+  "total_html_pages": 1,
+  "total_pdfs_parsed": 1,
+  "combined_content_hash": "8fc5b1fa074b36cc75c70189715442ddc6b63523ab855f7b76bee455af0ec187",
+  "metadata": {
+    "source_id": "us-nc-dhsr-rules",
+    "jurisdiction": {
+      "country": "US",
+      "state": "North Carolina",
+      "code": "US-NC",
+      "level": "state"
+    },
+    "source": {
+      "name": "North Carolina Division of Health Service Regulation - Rules and Regulations",
+      "type": "state_healthcare_regulatory_source",
+      "authority": "North Carolina Department of Health and Human Services, Division of Health Service Regulation",
+      "official": true,
+      "relevance": "Official North Carolina healthcare regulatory source that provides the regulatory index for DHSR programs and links to applicable permanent and temporary state administrative rules maintained by the North Carolina Office of Administrative Hearings.",
+      "base_url": "https://info.ncdhhs.gov/dhsr/",
+      "seed_urls": [
+        "https://info.ncdhhs.gov/dhsr/rules.htm"
+      ],
+      "allowed_domains": [
+        "info.ncdhhs.gov",
+        "reports.oah.state.nc.us"
+      ]
+    },
+    "crawl_settings": {
+      "enabled": true,
+      "engine": "crawl4ai",
+      "max_depth": 1,
+      "follow_links": true,
+      "include_pdf": true,
+      "allowed_content_types": [
+        "text/html",
+        "application/pdf"
+      ],
+      "respect_robots_txt": true,
+      "request_timeout_seconds": 30,
+      "max_retries": 3
+    },
+    "monitoring": {
+      "frequency": "monthly",
+      "change_detection": true,
+      "hash_algorithm": "sha256"
+    },
+    "status": {
+      "active": true,
+      "accessibility": "accessible",
+      "validation": "verified"
+    },
+    "timestamps": {
+      "created_at": null,
+      "updated_at": null,
+      "last_crawled_at": "2026-09-23T11:17:46.375188+00:00",
+      "last_success_at": "2026-09-23T11:17:46.375188+00:00"
+    }
+  }
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "source_id": "us-nc-dhsr-rules",
+    "jurisdiction": {
+      "country": "US",
+      "state": "North Carolina",
+      "code": "US-NC",
+      "level": "state"
+    },
+    "source": {
+      "name": "North Carolina Division of Health Service Regulation - Rules and Regulations",
+      "type": "state_healthcare_regulatory_source",
+      "authority": "North Carolina Department of Health and Human Services, Division of Health Service Regulation",
+      "official": true,
+      "relevance": "Official North Carolina healthcare regulatory source that provides the regulatory index for DHSR programs and links to applicable permanent and temporary state administrative rules maintained by the North Carolina Office of Administrative Hearings.",
+      "base_url": "https://info.ncdhhs.gov/dhsr/",
+      "seed_urls": [
+        "https://info.ncdhhs.gov/dhsr/rules.htm",
+        
+      ],
+      "allowed_domains": [
+        "info.ncdhhs.gov",
+        "reports.oah.state.nc.us"
+      ]
+    },
+    "crawl": {
+      "enabled": true,
+      "engine": "crawl4ai",
+      "max_depth": 1,
+      "follow_links": true,
+      "include_pdf": true,
+      "allowed_content_types": [
+        "text/html",
+        "application/pdf"
+      ],
+      "respect_robots_txt": true,
+      "request_timeout_seconds": 30,
+      "max_retries": 3
+    },
+    "monitoring": {
+      "frequency": "monthly",
+      "change_detection": true,
+      "hash_algorithm": "sha256"
+    },
+    "status": {
+      "active": true,
+      "accessibility": "accessible",
+      "validation": "verified"
+    },
+    "timestamps": {
+      "created_at": null,
+      "updated_at": null,
+      "last_crawled_at": null,
+      "last_success_at": null
+    }
+  },
+  {
+    "source_id": "us-sc-code-title44-ch115",
+    "jurisdiction": {
+      "country": "US",
+      "state": "South Carolina",
+      "code": "US-SC",
+      "level": "state"
+    },
+    "source": {
+      "name": "South Carolina Code of Laws - Title 44 Health",
+      "type": "state_healthcare_code",
+      "authority": "South Carolina Legislature / Legislative Council",
+      "official": true,
+      "relevance": "Official South Carolina statutory healthcare source containing state health laws relevant to healthcare regulatory monitoring.",
+      "base_url": "https://www.scstatehouse.gov/code/",
+      "seed_urls": [
+        "https://www.scstatehouse.gov/code/t44c115.php"
+      ],
+      "allowed_domains": [
+        "www.scstatehouse.gov"
+      ]
+    },
+    "crawl": {
+      "enabled": true,
+      "engine": "crawl4ai",
+      "max_depth": 1,
+      "follow_links": true,
+      "include_pdf": true,
+      "allowed_content_types": [
+        "text/html",
+        "application/pdf"
+      ],
+      "respect_robots_txt": true,
+      "request_timeout_seconds": 30,
+      "max_retries": 3
+    },
+    "monitoring": {
+      "frequency": "monthly",
+      "change_detection": true,
+      "hash_algorithm": "sha256"
+    },
+    "status": {
+      "active": true,
+      "accessibility": "accessible",
+      "validation": "verified"
+    },
+    "timestamps": {
+      "created_at": null,
+      "updated_at": null,
+      "last_crawled_at": null,
+      "last_success_at": null
+    }
+  }
+]
